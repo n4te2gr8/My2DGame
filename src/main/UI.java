@@ -488,7 +488,7 @@ public class UI {
 		
 		switch(subState) {
 		case 0: options_top(frameX, frameY); break;
-		case 1: options_fullScreenNotification(frameX, frameY);  break;
+		case 1: options_fullScreenNotification(frameX, frameY); break;
 		case 2: options_control(frameX, frameY); break;
 		case 3: options_endGameConfirmation(frameX, frameY); break;
 		}
@@ -591,6 +591,8 @@ public class UI {
 		g2.drawRect(textX, textY, 120, 24);
 		volumeWidth = 24 * gp.se.volumeScale;
 		g2.fillRect(textX, textY, volumeWidth, 24);
+		
+		gp.config.saveConfig();
 	}
 	
 	public void options_fullScreenNotification(int frameX, int frameY) {
