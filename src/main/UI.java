@@ -74,7 +74,6 @@ public class UI {
 		message.add(text);
 		messageCounter.add(0);
 	}
-	
 	public void draw(Graphics2D g2) {
 		this.g2 = g2;
 		
@@ -129,7 +128,6 @@ public class UI {
 			drawTradeScreen();
 		}
 	}
-	
 	public void drawGameOverScreen() {
 		g2.setColor(new Color(0,0,0,150));
 		g2.fillRect(0,0,gp.screenWidth, gp.screenHeight);
@@ -168,7 +166,6 @@ public class UI {
 			g2.drawString(">", x-40, y);
 		}
 	}
-	
 	public void drawPlayerLife() {
 		int x = gp.tileSize/2;
 		int y = gp.tileSize/2;
@@ -217,7 +214,6 @@ public class UI {
 			x += 35;
 		}
 	}
-	
 	public void drawMessage() {
 		int messageX = gp.tileSize;
 		int messageY = gp.tileSize * 4;
@@ -241,7 +237,6 @@ public class UI {
 			}
 		}
 	}
-	
 	public void drawTitleScreen() {
 		
 //		if(titleScreenState == 0) {
@@ -336,7 +331,6 @@ public class UI {
 //			}
 //		}
 	}
-	
 	public void drawPauseScreen() {
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
 		String text = "PAUSED";
@@ -345,7 +339,6 @@ public class UI {
 		
 		g2.drawString(text, x, y);
 	}
-	
 	public void drawDialogueScreen() {
 		
 		// WINDOW
@@ -365,7 +358,6 @@ public class UI {
 			y += 40;
 		}
 	}
-	
 	public void drawCharacterScreen() {
 		// CREATE A FRAME
 		final int frameX = gp.tileSize*2;
@@ -509,7 +501,8 @@ public class UI {
 		for(int i = 0; i < entity.inventory.size(); i++) {
 			// EQUIP CURSOR
 			if(entity.inventory.get(i) == entity.currentWeapon ||
-					entity.inventory.get(i) ==entity.currentShield) {
+					entity.inventory.get(i) ==entity.currentShield ||
+					entity.inventory.get(i) == entity.currentLight) {
 				g2.setColor(new Color(240,190,90));
 				g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
 			}
@@ -578,7 +571,6 @@ public class UI {
 			}
 		}
 	}
-	
 	public void drawOptionsScreen() {
 		g2.setColor(Color.white);
 		g2.setFont(g2.getFont().deriveFont(32F));
@@ -599,7 +591,6 @@ public class UI {
 		
 		gp.keyH.enterPressed = false;
 	}
-	
 	public void options_top(int frameX, int frameY) {
 		
 		int textX;
@@ -698,7 +689,6 @@ public class UI {
 		
 		gp.config.saveConfig();
 	}
-	
 	public void options_fullScreenNotification(int frameX, int frameY) {
 		int textX = frameX + gp.tileSize;
 		int textY = frameY + gp.tileSize*3;
@@ -721,7 +711,6 @@ public class UI {
 			}
 		}
 	}
-	
 	public void options_control(int frameX, int frameY) {
 		int textX;
 		int textY;
@@ -761,7 +750,6 @@ public class UI {
 			}
 		}
 	}
-	
 	public void options_endGameConfirmation(int frameX, int frameY) {
 		int textX = frameX + gp.tileSize;
 		int textY = frameY + gp.tileSize*3;
@@ -799,7 +787,6 @@ public class UI {
 			}
 		}
 	}
-	
 	public void drawTransition() {
 		
 		counter++;
@@ -816,7 +803,6 @@ public class UI {
 			gp.eHandler.previousEventY = gp.player.worldY;
 		}
 	}
-	
 	public void drawTradeScreen() {
 		switch(subState) {
 		case 0: trade_select(); break;
@@ -825,7 +811,6 @@ public class UI {
 		}
 		gp.keyH.enterPressed = false;
 	}
-	
 	public void trade_select() {
 		drawDialogueScreen();
 		
@@ -868,7 +853,6 @@ public class UI {
 		}
 		
 	}
-	
 	public void trade_buy() {
 		
 		// DRAW PLAYER INVENTORY
@@ -929,7 +913,6 @@ public class UI {
 			}
 		}
 	}
-	
 	public void trade_sell() {
 		
 		// DRAW PLAYER INVENTORY
@@ -993,12 +976,10 @@ public class UI {
 			}
 		}
 	}
-	
 	public int getItemIndexOnSlot(int slotCol, int slotRow) {
 		int itemIndex = slotCol + (slotRow*5);
 		return itemIndex;
 	}
-	
 	public void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0, 0, 0, 210);
 		g2.setColor(c);
@@ -1009,13 +990,11 @@ public class UI {
 		g2.setStroke(new BasicStroke(5));
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 	}
-	
 	public int getXforCenteredText(String text) {
 		int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = gp.screenWidth/2 - length/2;
 		return x;
 	}
-	
 	public int getXforAlignToRightText(String text, int tailX) {
 		int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = tailX - length;

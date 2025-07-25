@@ -28,6 +28,7 @@ public class Player extends Entity{
 	public final int screenY;
 	int standCounter = 0;
 	public boolean attackCanceled = false;
+	public boolean lightUpdated = false;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		
@@ -80,19 +81,16 @@ public class Player extends Entity{
 		attack = getAttack(); // The total attack value is decided by strength and weapon
 		defense = getDefense(); // The total defense value is decided by dexterity and shield
 	}
-	
 	public void setDefaultPositions() {
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		direction = "down";
 	}
-	
 	public void restoreLifeandMana() {
 		life = maxLife;
 		mana = maxMana;
 		invincible = false;
 	}
-	
 	public void setItems() {
 		
 		inventory.clear();
@@ -101,16 +99,13 @@ public class Player extends Entity{
 		inventory.add(new OBJ_Key(gp));
 		inventory.add(new OBJ_Axe(gp));
 	}
-	
 	public int getAttack() {
 		attackArea = currentWeapon.attackArea;
 		return attack = strength * currentWeapon.attackValue;
 	}
-	
 	public int getDefense() {
 		return defense = dexterity * currentShield.defenseValue;
 	}
-	
 	public void getPlayerImage() {
 		
 		up1 = setup("/player/boy_up_1", gp.tileSize, gp.tileSize);
@@ -122,7 +117,6 @@ public class Player extends Entity{
 		right1 = setup("/player/boy_right_1", gp.tileSize, gp.tileSize);
 		right2  = setup("/player/boy_right_2", gp.tileSize, gp.tileSize);
 	}
-	
 	public void getPlayerAttackImage() {
 		if(currentWeapon.type == type_sword) {
 			attackUp1 = setup("/player/boy_attack_up_1", gp.tileSize, gp.tileSize*2);
@@ -145,7 +139,6 @@ public class Player extends Entity{
 			attackRight2 = setup("/player/boy_axe_right_2", gp.tileSize*2, gp.tileSize);
 		}
 	}
-	
 	public void update() {
 		if (attacking == true) {
 			attacking();
@@ -266,7 +259,6 @@ public class Player extends Entity{
 			gp.playSE(12);
 		}
 	}
-	
 	public void attacking() {
 		spriteCounter++;
 		
@@ -316,7 +308,6 @@ public class Player extends Entity{
 			attacking = false;
 		}
 	}
-	
 	public void pickUpObject(int i) {
 		
 		if(i != 999) {
@@ -352,7 +343,6 @@ public class Player extends Entity{
 			}
 		}
 	}
-	
 	public void interactNPC(int i) {
 		if(gp.keyH.enterPressed == true) {
 			if(i != 999) {
@@ -362,7 +352,6 @@ public class Player extends Entity{
 			}
 		}
 	}
-	
 	public void contactMonster(int i) {
 		if(i != 999) {
 			if(invincible == false && gp.monster[gp.currentMap][i].dying == false) {
@@ -377,7 +366,6 @@ public class Player extends Entity{
 			}
 		}
 	}
-	
 	public void damageMonster(int i, int attack, int knockBackPower) {
 		if(i != 999) {
 			if(gp.monster[gp.currentMap][i].invincible == false) {
@@ -408,13 +396,11 @@ public class Player extends Entity{
 			}
 		}
 	}
-	
 	public void knockBack(Entity entity, int knockBackPower) {
 		entity.direction = direction;
 		entity.speed += knockBackPower;
 		entity.knockBack = true;
 	}
-	
 	public void damageInteractiveTile(int i) {
 		if(i != 999 && gp.iTile[gp.currentMap][i].destructible == true 
 					&& gp.iTile[gp.currentMap][i].isCorrectItem(this) == true
@@ -431,7 +417,6 @@ public class Player extends Entity{
 			}
 		}
 	}
-	
 	public void damageProjectile(int i) {
 		if(i != 999) {
 			Entity projectile = gp.projectile[gp.currentMap][i];
@@ -439,7 +424,6 @@ public class Player extends Entity{
 			generateParticle(projectile, projectile);
 		}
 	}
-	
 	public void checkLevelUp() {
 		if(exp >= nextLevelExp) {
 			level++;
@@ -456,7 +440,6 @@ public class Player extends Entity{
 									+ "You feel stronger!";
 		}
 	}
-	
 	public void selectItem() {
 		int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
 		
@@ -471,6 +454,15 @@ public class Player extends Entity{
 			if(selectedItem.type == type_shield) {
 				currentShield = selectedItem;
 				defense = getDefense();
+			}
+			if(selectedItem.type == type_light) {
+				if(currentLight == selectedItem) {
+					currentLight = null;
+				}
+				else {
+					currentLight = selectedItem;
+				}
+				lightUpdated = true;
 			}
 			if(selectedItem.type == type_consumable){
 				if(selectedItem.use(this) == true) {
