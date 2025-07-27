@@ -90,13 +90,13 @@ public class Lighting {
 		if(dayState == day) {
 			dayCounter++;
 			
-			if(dayCounter > 600) {	// 600 = 10 seconds
+			if(dayCounter > 36000) {	// 36000 = 10 mins
 				dayState = dusk;
 				dayCounter = 0;
 			}
 		}
 		if(dayState == dusk) {
-			filterAlpha += 0.001f;	// Smaller = Longer Transition
+			filterAlpha += 0.00001f;	// Smaller = Longer Transition
 			
 			if(filterAlpha > 1f) {
 				filterAlpha = 1f;
@@ -106,13 +106,13 @@ public class Lighting {
 		if(dayState == night) {
 			dayCounter++;
 			
-			if(dayCounter > 600) {
+			if(dayCounter > 36000) {
 				dayState = dawn;
 				dayCounter = 0;
 			}
 		}
 		if(dayState == dawn) {
-			filterAlpha -= 0.001f;
+			filterAlpha -= 0.00001f;
 			
 			if(filterAlpha < 0f) {
 				filterAlpha = 0;
