@@ -95,10 +95,12 @@ public class EventHandler {
 		if(gp.keyH.enterPressed == true) {
 			gp.gameState = gameState;
 			gp.player.attackCanceled = true;
-			gp.ui.currentDialogue = "You drink the water.\nYour life and mana have been recovered.";
+			gp.ui.currentDialogue = "You drink the water.\nYour life and mana have been recovered.\n"
+					+ "(Progress Saved)";
 			gp.player.life = gp.player.maxLife;
 			gp.player.mana = gp.player.maxMana;
 			gp.aSetter.setMonster();
+			gp.saveLoad.save();
 		}
 	}
 	public void teleport(int map, int col, int row) {
