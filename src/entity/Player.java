@@ -17,6 +17,8 @@ import main.UtilityTool;
 import object.OBJ_Axe;
 import object.OBJ_Fireball;
 import object.OBJ_Key;
+import object.OBJ_Lantern;
+import object.OBJ_Pickaxe;
 import object.OBJ_Rock;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
@@ -50,10 +52,10 @@ public class Player extends Entity{
 	}
 	public void setDefaultValues() {
 		
-		worldX = gp.tileSize * 23;
-		worldY = gp.tileSize * 21;
-//		worldX = gp.tileSize * 12;
-//		worldY = gp.tileSize * 12;
+//		worldX = gp.tileSize * 23;
+//		worldY = gp.tileSize * 21;
+		worldX = gp.tileSize * 12;
+		worldY = gp.tileSize * 11;
 		gp.currentMap = 0;
 		defaultSpeed = 4;
 		speed = defaultSpeed;
@@ -111,6 +113,8 @@ public class Player extends Entity{
 		inventory.add(currentShield);
 		inventory.add(new OBJ_Key(gp));
 		inventory.add(new OBJ_Axe(gp));
+		inventory.add(new OBJ_Pickaxe(gp));
+		inventory.add(new OBJ_Lantern(gp));
 	}
 	public int getAttack() {
 		attackArea = currentWeapon.attackArea;
@@ -180,6 +184,16 @@ public class Player extends Entity{
 			attackLeft2 = setup("/player/boy_axe_left_2", gp.tileSize*2, gp.tileSize);
 			attackRight1 = setup("/player/boy_axe_right_1", gp.tileSize*2, gp.tileSize);
 			attackRight2 = setup("/player/boy_axe_right_2", gp.tileSize*2, gp.tileSize);
+		}
+		if(currentWeapon.type == type_pickaxe) {
+			attackUp1 = setup("/player/boy_pick_up_1", gp.tileSize, gp.tileSize*2);
+			attackUp2 = setup("/player/boy_pick_up_2", gp.tileSize, gp.tileSize*2);
+			attackDown1 = setup("/player/boy_pick_down_1", gp.tileSize, gp.tileSize*2);
+			attackDown2 = setup("/player/boy_pick_down_2", gp.tileSize, gp.tileSize*2);
+			attackLeft1 = setup("/player/boy_pick_left_1", gp.tileSize*2, gp.tileSize);
+			attackLeft2 = setup("/player/boy_pick_left_2", gp.tileSize*2, gp.tileSize);
+			attackRight1 = setup("/player/boy_pick_right_1", gp.tileSize*2, gp.tileSize);
+			attackRight2 = setup("/player/boy_pick_right_2", gp.tileSize*2, gp.tileSize);
 		}
 	}
 	public void getGuardImage() {
@@ -388,11 +402,12 @@ public class Player extends Entity{
 		}
 	}
 	public void interactNPC(int i) {
-		if(gp.keyH.enterPressed == true) {
-			if(i != 999) {
+		 if(i != 999) {
+			if(gp.keyH.enterPressed == true) {
 				attackCanceled = true;
 				gp.npc[gp.currentMap][i].speak();
 			}
+			gp.npc[gp.currentMap][i].move(direction);
 		}
 	}
 	public void contactMonster(int i) {
@@ -456,6 +471,7 @@ public class Player extends Entity{
 			generateParticle(gp.iTile[gp.currentMap][i], gp.iTile[gp.currentMap][i]);
 			
 			if(gp.iTile[gp.currentMap][i].life == 0) {
+//				gp.iTile[gp.currentMap][i].checkDrop();	// Drop items from tile
 				gp.iTile[gp.currentMap][i] = gp.iTile[gp.currentMap][i].getDestroyedForm();
 			}
 		}
@@ -490,7 +506,7 @@ public class Player extends Entity{
 		if(itemIndex < inventory.size()) {
 			Entity selectedItem = inventory.get(itemIndex);
 			
-			if(selectedItem.type == type_sword || selectedItem.type == type_axe) {
+			if(selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe) {
 				currentWeapon = selectedItem;
 				attack = getAttack();
 				getAttackImage();
