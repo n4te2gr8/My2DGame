@@ -52,10 +52,11 @@ public class Player extends Entity{
 	}
 	public void setDefaultValues() {
 		
-//		worldX = gp.tileSize * 23;
-//		worldY = gp.tileSize * 21;
-		worldX = gp.tileSize * 12;
-		worldY = gp.tileSize * 11;
+		gp.currentMap = 0;
+		worldX = gp.tileSize * 23;
+		worldY = gp.tileSize * 21;
+//		worldX = gp.tileSize * 12;
+//		worldY = gp.tileSize * 11;
 		gp.currentMap = 0;
 		defaultSpeed = 4;
 		speed = defaultSpeed;
@@ -359,11 +360,13 @@ public class Player extends Entity{
 		if(mana > maxMana) {
 			mana = maxMana;
 		}
-		if(life <= 0) {
-			gp.gameState = gp.gameOverState;
-			gp.ui.commandNum = -1;
-			gp.stopMusic();
-			gp.playSE(12);
+		if(keyH.godModeOn == false) {
+			if(life <= 0) {
+				gp.gameState = gp.gameOverState;
+				gp.ui.commandNum = -1;
+				gp.stopMusic();
+				gp.playSE(12);
+			}
 		}
 	}
 	public void pickUpObject(int i) {
