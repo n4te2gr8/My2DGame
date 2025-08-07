@@ -53,11 +53,11 @@ public class Player extends Entity{
 	public void setDefaultValues() {
 		
 		gp.currentMap = 0;
-		worldX = gp.tileSize * 23;
-		worldY = gp.tileSize * 21;
-//		worldX = gp.tileSize * 12;
-//		worldY = gp.tileSize * 11;
-		gp.currentMap = 0;
+//		worldX = gp.tileSize * 23;
+//		worldY = gp.tileSize * 21;
+		worldX = gp.tileSize * 7;
+		worldY = gp.tileSize * 9;
+		gp.currentMap = 2;
 		defaultSpeed = 4;
 		speed = defaultSpeed;
 		direction = "down";
@@ -256,7 +256,7 @@ public class Player extends Entity{
 			
 			// CHECK TILE COLLISION
 			collisionOn = false;
-			gp.cChecker.checkTile(this);
+//			gp.cChecker.checkTile(this);
 			
 			// CHECK OBJECT COLLISION
 			int objIndex = gp.cChecker.checkObject(this, true);
@@ -644,7 +644,9 @@ public class Player extends Entity{
 		if(transparent == true) {
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
 		}
-		g2.drawImage(image, tempScreenX, tempScreenY, null);
+		if(drawing == true) {
+			g2.drawImage(image, tempScreenX, tempScreenY, null);
+		}
 		
 		// Reset alpha
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
