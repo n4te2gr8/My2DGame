@@ -42,7 +42,7 @@ public class Entity {
 	public boolean attacking = false;
 	public boolean alive = true;
 	public boolean dying = false;
-	boolean hpBarOn = false;
+	public boolean hpBarOn = false;
 	public boolean onPath = false;
 	public boolean knockBack = false;
 	public String knockBackDirection;
@@ -59,7 +59,7 @@ public class Entity {
 	public int invincibleCounter = 0;
 	public int shotAvailableCounter = 0;
 	int dyingCounter = 0;
-	int hpBarCounter = 0;
+	public int hpBarCounter = 0;
 	int knockBackCounter = 0;
 	public int guardCounter = 0;
 	int offBalanceCounter = 0;
@@ -87,6 +87,7 @@ public class Entity {
 	public Entity currentShield;
 	public Entity currentLight;
 	public Projectile projectile;
+	public boolean boss;
 	
 	// ITEM ATTRIBUTES
 	public ArrayList<Entity> inventory = new ArrayList<>();
@@ -118,6 +119,14 @@ public class Entity {
 	
 	public Entity(GamePanel gp) {
 		this.gp = gp;
+	}
+	public int getScreenX() {
+		int screenX = worldX - gp.player.worldX + gp.player.screenX;
+		return screenX;
+	}
+	public int getScreenY() {
+		int screenY = worldY - gp.player.worldY + gp.player.screenY;
+		return screenY;
 	}
 	public int getLeftX() {
 		return worldX + solidArea.x;
@@ -566,19 +575,22 @@ public class Entity {
 		target.speed += knockBackPower;
 		target.knockBack = true;
 	}
+	public boolean inCamera() {
+		boolean inCamera = false;
+		if(worldX + gp.tileSize*5 > gp.player.worldX - gp.player.screenX &&
+				   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+				   worldY + gp.tileSize*5 > gp.player.worldY - gp.player.screenY &&
+				   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+			inCamera = true;
+		}
+		return inCamera;
+	}
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
 		
-		int screenX = worldX - gp.player.worldX + gp.player.screenX;
-		int screenY = worldY - gp.player.worldY + gp.player.screenY;
-		
-		
-		if(worldX + gp.tileSize*5 > gp.player.worldX - gp.player.screenX &&
-		   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-		   worldY + gp.tileSize*5 > gp.player.worldY - gp.player.screenY &&
-		   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-			int tempScreenX = screenX;
-			int tempScreenY = screenY;
+		if(inCamera() == true) {
+			int tempScreenX = getScreenX();
+			int tempScreenY = getScreenY();
 			
 			switch(direction) {
 			case "up":
@@ -587,7 +599,7 @@ public class Entity {
 					if(spriteNum == 2) {image = up2;}
 				}
 				if(attacking == true) {
-					tempScreenY = screenY - up1.getHeight();
+					tempScreenY = getScreenY() - up1.getHeight();
 					if(spriteNum == 1) {image = attackUp1;}
 					if(spriteNum == 2) {image = attackUp2;}
 				}
@@ -608,7 +620,7 @@ public class Entity {
 					if(spriteNum == 2) {image = left2;}
 				}
 				if(attacking == true) {
-					tempScreenX = screenX - left1.getWidth();
+					tempScreenX = getScreenX() - left1.getWidth();
 					if(spriteNum == 1) {image = attackLeft1;}
 					if(spriteNum == 2) {image = attackLeft2;}
 				}
@@ -624,26 +636,6 @@ public class Entity {
 				}
 				break;
 			}
-			
-			//Monster HP bar
-			if(type == 2 && hpBarOn == true) {
-				double oneScale = (double)gp.tileSize / maxLife;
-				double hpBarValue = oneScale*life;
-				
-				g2.setColor(new Color(35, 35, 35));
-				g2.fillRect(screenX - 1, screenY - 16, gp.tileSize + 2, 12);
-				
-				g2.setColor(new Color(255, 0, 30));
-				g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
-				
-				hpBarCounter++;
-				
-				if(hpBarCounter > 600) {
-					hpBarCounter = 0;
-					hpBarOn = false;
-				}
-			}
-			
 			
 			if(invincible == true) {
 				hpBarOn = true;
